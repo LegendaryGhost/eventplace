@@ -2,11 +2,6 @@
     "name": "rihantiana/server",
     "type": "project",
     "license": "MIT",
-    "autoload": {
-        "psr-4": {
-            "Rihantiana\\Server\\": "src/"
-        }
-    },
     "authors": [
         {
             "name": "Rihantiana",
