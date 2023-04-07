@@ -24,7 +24,7 @@ CREATE TABLE tickets
 ALTER TABLE tickets
   ADD CONSTRAINT UQ_id UNIQUE (id);
 
-CREATE TABLE ticketTypes
+CREATE TABLE ticket_types
 (
   id    INT         NOT NULL AUTO_INCREMENT,
   name  VARCHAR(50) NOT NULL,
@@ -33,7 +33,7 @@ CREATE TABLE ticketTypes
   PRIMARY KEY (id)
 );
 
-ALTER TABLE ticketTypes
+ALTER TABLE ticket_types
   ADD CONSTRAINT UQ_id UNIQUE (id);
 
 CREATE TABLE users
@@ -54,15 +54,15 @@ ALTER TABLE events
     FOREIGN KEY (creator)
     REFERENCES users (id);
 
-ALTER TABLE ticketTypes
-  ADD CONSTRAINT FK_events_TO_ticketTypes
+ALTER TABLE ticket_types
+  ADD CONSTRAINT FK_events_TO_ticket_types
     FOREIGN KEY (event)
     REFERENCES events (id);
 
 ALTER TABLE tickets
-  ADD CONSTRAINT FK_ticketTypes_TO_tickets
+  ADD CONSTRAINT FK_ticket_types_TO_tickets
     FOREIGN KEY (type)
-    REFERENCES ticketTypes (id);
+    REFERENCES ticket_types (id);
 
 ALTER TABLE tickets
   ADD CONSTRAINT FK_users_TO_tickets

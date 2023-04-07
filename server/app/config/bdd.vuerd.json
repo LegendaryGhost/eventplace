@@ -3,8 +3,8 @@
     "version": "2.2.11",
     "width": 2000,
     "height": 2000,
-    "scrollTop": 0,
-    "scrollLeft": 0,
+    "scrollTop": -386,
+    "scrollLeft": -89,
     "zoomLevel": 1,
     "show": {
       "tableComment": true,
@@ -166,7 +166,7 @@
           "active": false,
           "left": 93,
           "top": 58,
-          "zIndex": 155,
+          "zIndex": 1,
           "widthName": 60,
           "widthComment": 60
         },
@@ -295,9 +295,9 @@
         ],
         "ui": {
           "active": false,
-          "left": 114,
-          "top": 343,
-          "zIndex": 153,
+          "left": 115,
+          "top": 340,
+          "zIndex": 2,
           "widthName": 60,
           "widthComment": 60
         },
@@ -403,17 +403,18 @@
         ],
         "ui": {
           "active": false,
-          "left": 677,
-          "top": 679,
-          "zIndex": 149,
+          "left": 671,
+          "top": 661,
+          "zIndex": 4,
           "widthName": 60,
-          "widthComment": 60
+          "widthComment": 60,
+          "color": "#FF0000"
         },
         "visible": true,
         "id": "3e9664e6-dfcf-4e2f-b629-5bcfe58a897f"
       },
       {
-        "name": "ticketTypes",
+        "name": "ticket_types",
         "comment": "",
         "columns": [
           {
@@ -510,11 +511,11 @@
           }
         ],
         "ui": {
-          "active": false,
-          "left": 118,
-          "top": 674,
-          "zIndex": 157,
-          "widthName": 67.025390625,
+          "active": true,
+          "left": 119,
+          "top": 623,
+          "zIndex": 8,
+          "widthName": 70.6435546875,
           "widthComment": 60
         },
         "visible": true,
@@ -546,8 +547,8 @@
           "columnIds": [
             "8f64f845-a0ae-462c-a82c-8c4f1e4e63a0"
           ],
-          "x": 328.474365234375,
-          "y": 343,
+          "x": 329.474365234375,
+          "y": 340,
           "direction": "top"
         },
         "constraintName": "fk_user_to_event",
@@ -563,8 +564,8 @@
           "columnIds": [
             "6a077e6c-a8d5-4369-a78d-81a5a391eefd"
           ],
-          "x": 328.474365234375,
-          "y": 514.5,
+          "x": 329.474365234375,
+          "y": 511.5,
           "direction": "bottom"
         },
         "end": {
@@ -572,8 +573,8 @@
           "columnIds": [
             "d369d73c-036d-4758-8c05-bb9183b004fa"
           ],
-          "x": 328.859375,
-          "y": 674,
+          "x": 329.859375,
+          "y": 623,
           "direction": "top"
         },
         "constraintName": "fk_events_to_tickettype",
@@ -589,8 +590,8 @@
           "columnIds": [
             "01ef4e21-4a73-45c4-bdd5-4dd6e9985cb2"
           ],
-          "x": 539.71875,
-          "y": 749.5,
+          "x": 540.71875,
+          "y": 698.5,
           "direction": "right"
         },
         "end": {
@@ -598,8 +599,8 @@
           "columnIds": [
             "30dea000-a0b9-44cc-99dc-e58cfd547297"
           ],
-          "x": 677,
-          "y": 716.75,
+          "x": 671,
+          "y": 698.75,
           "direction": "left"
         },
         "constraintName": "fk_tickettype_to_tickets",
@@ -624,8 +625,8 @@
           "columnIds": [
             "e839ede1-5fec-4cb2-b0fe-9ce2301bbcdc"
           ],
-          "x": 677,
-          "y": 792.25,
+          "x": 671,
+          "y": 774.25,
           "direction": "left"
         },
         "constraintName": "fk_users_to_tickets",
