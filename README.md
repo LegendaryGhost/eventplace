@@ -1,6 +1,6 @@
 # Eventplace
 
-***Created by [Rihantiana]() and [Loïc]()***
+***Created by [Rihantiana](https://github.com/LegendaryGhost) and [Loïc](https://github.com/loicoliver)***
 
 Our main goal is to allow people to **buy tickets** for any type of event easily. Eventplace is a platform where both ticket buyers and event organisator can fulfill their needs.
 
