@@ -5,7 +5,7 @@ import Login from './pages/Login/Login';
 import SignUp from './pages/SignUp/SignUp';
 const router = createBrowserRouter([
   { path: "/login", element: <Login /> },
-  { path: "/signup", element: <SignUp /> },0
+  { path: "/signup", element: <SignUp /> },
   { path: "*", element: <Home /> }
 ]);
 
