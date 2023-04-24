@@ -6,11 +6,14 @@
     use \Psr\Http\Message\ResponseInterface as Response;
     use \Psr\Http\Message\ServerRequestInterface as Request;
     use \Psr\Http\Server\RequestHandlerInterface as RequestHandler;
+    use \DI\Container;
 
     use App\Controller\UserController;
 
+    $container = new Container();
+
     // Création d'une instance de l'application Slim
-    $app = AppFactory::create();
+    $app = AppFactory::createFromContainer($container);
     $rraStrategy = new RequestResponseArgs();
 
     
