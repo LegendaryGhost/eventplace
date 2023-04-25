@@ -29,7 +29,7 @@ class UserController extends Controller {
             'message' => 'The user has been registered'
         ];
 
-        //Vérifier le type de contenu
+        // Check the body content
         if(is_null($data)) {
             $responseBody = [
                 "status" => "error",
@@ -39,7 +39,7 @@ class UserController extends Controller {
             return $response->withStatus(400);
         }
 
-        // check if the request's body contains the correct informations
+        // Check if the request's body contains all the correct informations
         if(isset(
             $data['name'],
             $data['email'],

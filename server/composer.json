@@ -12,7 +12,8 @@
         "vlucas/phpdotenv": "^5.5",
         "slim/slim": "^4.11",
         "slim/psr7": "^1.6",
-        "php-di/php-di": "^7.0"
+        "php-di/php-di": "^7.0",
+        "firebase/php-jwt": "^6.4"
     },
     "autoload": {
         "psr-4": {

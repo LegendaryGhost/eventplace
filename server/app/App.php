@@ -29,7 +29,7 @@
                 ->withHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     });
 
-    // Add Error Handling Middleware
+    // Middleware de gestion des erreurs
     $app->addErrorMiddleware(true, false, false);
 
     // Définition de la route de la page d'accueil
@@ -38,15 +38,11 @@
         return $response;
     });
 
-    $app->get('/error', function (Request $request, Response $response) {
-        $response->getBody()->write('Page d\'erreur');
-        return $response;
-    });
-
     $app->group('/user', function (RouteCollectorProxy $group) {
         global $rraStrategy;
         $group->get('/{id:[0-9]+}', [UserController::class, 'index'])->setInvocationStrategy($rraStrategy);
         $group->post('/register', [UserController::class, 'register']);
+        $group->post('/login', [UserController::class, 'login']);
     });
 
     // Autres définitions de routes
