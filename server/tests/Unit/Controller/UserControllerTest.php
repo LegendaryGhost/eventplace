@@ -25,182 +25,108 @@
             $this->request = $this->createMock(Request::class);
         }
 
-        public function testRegisterWithInvalidJson() {
-
-            $this->request->method('getParsedBody')->willReturn(null);
-            
-            $response = $this->userController->register($this->request, $this->response);
-
-            $expectedResponse = [
-                "status" => "error",
-                "message" => "Invalid JSON body"
+        public static function dataprovider(): array {
+            $classic_case = [
+                [
+                    'status' => 'error',
+                    'message' => ''
+                ],
+                [
+                    'name' => 'John Doe',
+                    'email' => 'johndoe@example.com',
+                    'password' => 'azertyuiop123',
+                    'type' => 'creator'
+                ],
+                400
             ];
-            $this->assertSame(400, $response->getStatusCode());
-            $this->assertSame(json_encode($expectedResponse), (string)$response->getBody());
-            
+
+            $cases = [
+                [
+                    ['message' => 'Invalid JSON body'],
+                    null,
+                    'don\'t merge body' => true
+                ],
+                [
+                    ['message' => 'Missing information'],
+                    ['name' => 'John Doe'],
+                    'don\'t merge body' => true
+                ],
+                [
+                    ['message' => 'Informations are required and can\'t be an empty string'],
+                    ['email' => '']
+                ],
+                [
+                    ['message' => 'Invalid email address'],
+                    ['email' => 'johndoeexample.com']
+                ],
+                [
+                    ['message' => 'Already signed email address'],
+                    'already signed email' => true
+                ],
+                [
+                    ['message' => 'Too short password (must contain at least 8 characters)'],
+                    ['password' => 'azerty']
+                ],
+                [
+                    ['message' => 'Incorrect user type (must be buyer or creator)'],
+                    ['type' => 'creato']
+                ],
+                [
+                    [
+                        'status' => 'success',
+                        'message' => 'The user has been registered'
+                    ],
+                    [],
+                    200
+                ]
+            ];
+
+            $testCases = [];
+
+            foreach($cases as $case) {
+                $newCase = [];
+                $caseName = strtolower($case[0]['message']);
+                $newCase[] = array_merge($classic_case[0], $case[0]);
+                if(isset($case['don\'t merge body'])) {
+                    $newCase[] = $case['don\'t merge body'] ? $case[1] : [];
+                } else {
+                    $newCase[] = array_merge($classic_case[1], isset($case[1]) ? $case[1] : []);
+                }
+                $newCase[] = isset($case[2]) ? $case[2] : $classic_case[2];
+
+                if(isset($case['already signed email'])) {
+                    $newCase[] = $case['already signed email'];
+                }
+
+                $testCases[$caseName] = $newCase;
+            }
+
+            return $testCases;
         }
 
-        public function testRegisterWithMissingInfo() {
-            // create a fake request
-            $expectedResponse = [
-                "status" => "error",
-                "message" => "Missing information"
-            ];
+        /** @dataProvider dataprovider */
+        public function testRegisterAll(
+            array $expectedResponse,
+            array|null $parsedBody,
+            int $expectedStatus,
+            bool $alreadySigned = false
+        ):void {
+            $this->request->method('getParsedBody')->willReturn($parsedBody);
 
-            $this->request->method('getParsedBody')->willReturn(['name' => 'John Doe']);
+            if($expectedStatus === 200) {
+                $this->userModel->expects($this->once())->method('create');
+            }
+
+            if($alreadySigned) {
+                $this->userModel->method('findByEmail')->willReturn($parsedBody);
+            }
 
             // call the register method
             $response = $this->userController->register($this->request, $this->response);
 
             // assert the response
-            $this->assertSame(400, $response->getStatusCode());
-            $this->assertSame(json_encode($expectedResponse), (string)$response->getBody());
-        }
-
-        public function testRegisterWithEmptyStringInfo() {
-            // create a fake request
-            $expectedResponse = [
-                "status" => "error",
-                "message" => "Informations are required and can't be an empty string"
-            ];
-
-            $body = [
-                'name' => 'John Doe',
-                'email' => '',
-                'password' => 'azertyuiop123',
-                'type' => 'creator'
-            ];
-
-            $this->request->method('getParsedBody')->willReturn($body);
-
-            // call the register method
-            $response = $this->userController->register($this->request, $this->response);
-
-            // assert the response
-            $this->assertSame(400, $response->getStatusCode());
-            $this->assertSame(json_encode($expectedResponse), (string)$response->getBody());
-        }
-
-        public function testRegisterWithInvalidEmail() {
-            // create a fake request
-            $expectedResponse = [
-                "status" => "error",
-                "message" => "Invalid email address"
-            ];
-
-            $body = [
-                'name' => 'John Doe',
-                'email' => 'johndoeexample.com',
-                'password' => 'azertyuiop123',
-                'type' => 'creator'
-            ];
-
-            $this->request->method('getParsedBody')->willReturn($body);
-
-            // call the register method
-            $response = $this->userController->register($this->request, $this->response);
-
-            // assert the response
-            $this->assertSame(400, $response->getStatusCode());
-            $this->assertSame(json_encode($expectedResponse), (string)$response->getBody());
-        }
-
-        public function testRegisterWithAlreadySignedEmail() {
-            // create a fake request
-            $expectedResponse = [
-                "status" => "error",
-                "message" => "Already signed email address"
-            ];
-
-            $body = [
-                'name' => 'John Doe',
-                'email' => 'johndoe@example.com',
-                'password' => 'azertyuiop123',
-                'type' => 'creator'
-            ];
-
-            $this->userModel->method('findByEmail')->willReturn($body);
-            $this->request->method('getParsedBody')->willReturn($body);
-
-            // call the register method
-            $response = $this->userController->register($this->request, $this->response);
-
-            // assert the response
-            $this->assertSame(400, $response->getStatusCode());
-            $this->assertSame(json_encode($expectedResponse), (string)$response->getBody());
-        }
-
-        public function testRegisterWithTooShortPassword() {
-            // create a fake request
-            $expectedResponse = [
-                "status" => "error",
-                "message" => "Too short password (must contain at least 8 characters)"
-            ];
-
-            $body = [
-                'name' => 'John Doe',
-                'email' => 'johndoe@example.com',
-                'password' => 'azerty',
-                'type' => 'creator'
-            ];
-
-            $this->request->method('getParsedBody')->willReturn($body);
-
-            // call the register method
-            $response = $this->userController->register($this->request, $this->response);
-
-            // assert the response
-            $this->assertSame(400, $response->getStatusCode());
-            $this->assertSame(json_encode($expectedResponse), (string)$response->getBody());
-        }
-
-        public function testRegisterWithIncorrectUserType() {
-            // create a fake request
-            $expectedResponse = [
-                "status" => "error",
-                "message" => "Incorrect user type (must be buyer or creator)"
-            ];
-
-            $body = [
-                'name' => 'John Doe',
-                'email' => 'johndoe@example.com',
-                'password' => 'azertyuiop123',
-                'type' => 'creato'
-            ];
-
-            $this->request->method('getParsedBody')->willReturn($body);
-
-            // call the register method
-            $response = $this->userController->register($this->request, $this->response);
-
-            // assert the response
-            $this->assertSame(400, $response->getStatusCode());
-            $this->assertSame(json_encode($expectedResponse), (string)$response->getBody());
-        }
-
-        public function testRegisterWithCorrectInfo() {
-            // create a fake request
-            $expectedResponse = [
-                'status' => 'success',
-                'message' => 'The user has been registered'
-            ];
-
-            $correctBody = [
-                'name' => 'John Doe',
-                'email' => 'john.doe@example.com',
-                'password' => 'azertyuiop123',
-                'type' => 'creator'
-            ];
-            $this->request->method('getParsedBody')->willReturn($correctBody);
-
-            $this->userModel->expects($this->once())->method('create')->with($correctBody);
-            
-            // call the register method
-            $response = $this->userController->register($this->request, $this->response);
-
-            // assert the response
-            $this->assertSame(200, $response->getStatusCode());
-            $this->assertSame(json_encode($expectedResponse), (string)$response->getBody());
+            $this->assertSame($expectedStatus, $response->getStatusCode());
+            $this->assertEquals($expectedResponse, json_decode($response->getBody(), true));
         }
 
     }
