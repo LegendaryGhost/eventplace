@@ -8,9 +8,9 @@
          * Recherche un utilisateur à partir de son email
          *
          * @param string $email
-         * @return array
+         * @return array|bool
          */
-        public function findByEmail($email):array {
+        public function findByEmail(string $email):array|bool {
             return $this->query(
                 'SELECT * FROM ' . $this->table .
                 ' WHERE email = ?;',

@@ -2,6 +2,7 @@
 
     namespace Tests\Unit\Controller;
 
+    use App\Auth\UserAuth;
     use \App\Controller\UserController;
     use \App\Model\UserModel;
 
@@ -13,19 +14,21 @@
 
         protected $userController;
         protected $userModel;
+        protected $userAuth;
         protected $response;
         protected $request;
 
         protected function setUp(): void {
             parent::setUp();
             $this->userModel = $this->createMock(UserModel::class);
-            $this->userController = new UserController($this->userModel);
+            $this->userAuth = $this->createMock(UserAuth::class);
+            $this->userController = new UserController($this->userModel, $this->userAuth);
             $this->response = (new ResponseFactory())->createResponse();
             // $this->response = $this->createMock(Response::class);
             $this->request = $this->createMock(Request::class);
         }
 
-        public static function dataprovider(): array {
+        public static function registerProvider(): array {
             $classic_case = [
                 [
                     'status' => 'error',
@@ -104,8 +107,8 @@
             return $testCases;
         }
 
-        /** @dataProvider dataprovider */
-        public function testRegisterAll(
+        /** @dataProvider registerProvider */
+        public function testRegister(
             array $expectedResponse,
             array|null $parsedBody,
             int $expectedStatus,
@@ -114,7 +117,7 @@
             $this->request->method('getParsedBody')->willReturn($parsedBody);
 
             if($expectedStatus === 200) {
-                $this->userModel->expects($this->once())->method('create');
+                $this->userAuth->expects($this->once())->method('register');
             }
 
             if($alreadySigned) {
@@ -127,6 +130,10 @@
             // assert the response
             $this->assertSame($expectedStatus, $response->getStatusCode());
             $this->assertEquals($expectedResponse, json_decode($response->getBody(), true));
+        }
+
+        public function testSignIn():void {
+            $this->markTestIncomplete('Test not implemented');
         }
 
     }

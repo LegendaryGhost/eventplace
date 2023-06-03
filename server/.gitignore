@@ -1,4 +1,7 @@
 
-#dependencies
+# dependencies
 /vendor
 .env
+
+# cache
+.phpunit.result.cache

@@ -16,10 +16,8 @@
     $app = AppFactory::createFromContainer($container);
     $rraStrategy = new RequestResponseArgs();
 
-    
     $app->addRoutingMiddleware();
     $app->addBodyParsingMiddleware();
-
 
     $app->add(function (Request $request, RequestHandler $handler): Response {
         $response = $handler->handle($request);
